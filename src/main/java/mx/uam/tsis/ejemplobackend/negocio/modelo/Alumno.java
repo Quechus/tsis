@@ -3,8 +3,9 @@ package mx.uam.tsis.ejemplobackend.negocio.modelo;
 import lombok.Builder;
 import lombok.Data;
 
+
 @Builder
-@Data
+@Data//getter y setters
 public class Alumno {
 	private Integer matricula;
 	

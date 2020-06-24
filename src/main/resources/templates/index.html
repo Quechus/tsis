@@ -1,5 +1,114 @@
 <html>
+	<head>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+		<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+	</head>
+	<style>
+		body{
+			background-color:black;
+			color:red;
+		}
+	</style>
 	<body>
-		Hola Spring Boot!
+		<div class="w3-row">
+			<div class="w3-col m5 l5">
+				<p></p>
+			</div>
+			<div class="w3-col m4 l4 w3-margin">
+				<form>
+ 				 <label>Matricula:</label><br>
+ 				 <input type="text" id="matricula" name="matricula"><br>
+ 				 <label>Nombre:</label><br>
+  				 <input type="text" id="nombre" name="nombre"><br>
+  				 <label>Carrera:</label><br>
+  				 <input type="text" id="carrera" name="carrera"><br><br>
+  				 <button id="createbtn" type="button" class="w3-button w3-red">CREATE</button>
+				 <button id="readbtn" type="button" class="w3-button w3-red">READ</button>
+				 <button id="updatebtn" type="button" class="w3-button w3-red">UPDATE</button>
+				 <button id="deletebtn" type="button" class="w3-button w3-red">DELETE</button>
+				</form> 
+			</div>
+			<div class="w3-col m3 l3">
+				<p></p>
+			</div>
+		</div>
+		
 	</body>
+	
+	<script>
+	
+	$(document).ready(function(){
+	
+		$("#createbtn").click(function(){
+			var matricula = document.getElementById("matricula");
+			var nombre = document.getElementById("nombre");
+			var carrera = document.getElementById("carrera")
+			$.ajax({
+				type : "POST",
+				contentType : "application/json",
+				url : "/alumnos",
+				data : JSON.stringify({"matricula":""+matricula.value+"","nombre":""+nombre.value+"","carrera":""+carrera.value+""}/*datos*/),
+				dataType : 'json',
+				success : function(result) {
+					console.log("data: "+  result);
+				}
+				
+			});
+		  });//fin create
+		  
+		$("#readbtn").click(function(){
+			var matricula = $('#matricula').val();
+			var resultadodata;
+			  $.get("alumnos/"+matricula, function(data, status){
+				  $('#nombre').attr('placeholder','nombre').val(data.nombre);
+				  $('#carrera').attr('placeholder','carrera').val(data.carrera);
+			      alert("Data: " + data.nombre + "\nStatus: " + status);
+			      
+			    });
+	    });//fin read
+	    
+	    $("#update").click(function(){
+			  var matricula = $('#matricula').val();
+			  
+				var informacion={
+						
+			    	"matricula": $('#matricula').val(),
+			        "nombre":  $('#nombre').val(),
+			        "carrera":  $('#carrera').val()
+			    }
+				$.ajax({
+					type : "PUT",
+					contentType : "application/json",
+					url : "alumnos/"+matricula,
+					data : JSON.stringify(informacion),
+					dataType : 'json',
+					success : function(result) {
+						console.log("data: "+  result);
+					}
+					
+				});
+			  });//fin update
+	    
+		$("#deletebtn").click(function(){
+			  var matricula = $('#matricula').val();
+			  var urldir="alumnos/"+matricula ;
+			  alert(urldir);
+				$.ajax({
+					type : "DELETE",
+					url : urldir,
+					success : function(result) {
+						console.log("data: "+  result);
+					}
+				});
+			  });//fin delete
+	    
+	    
+	    
+	});
+	
+	
+	
+	</script>
+	
+	
 </html>

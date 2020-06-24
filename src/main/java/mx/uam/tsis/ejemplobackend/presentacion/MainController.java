@@ -21,7 +21,7 @@ public class MainController {
 	public String index() {
 		
 		log.info("Se invocó el método index()");
-	
+		
 		return "index";
 	}
 
