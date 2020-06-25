@@ -40,16 +40,14 @@
 	$(document).ready(function(){
 	
 		$("#createbtn").click(function(){
-			
-			  var matricula = $('#matricula').val();
-			  var nombre = $('#nombre').val();
-			  var carrera = $('#carrera').val();
-			
+			var matricula = document.getElementById("matricula");
+			var nombre = document.getElementById("nombre");
+			var carrera = document.getElementById("carrera")
 			$.ajax({
 				type : "POST",
 				contentType : "application/json",
 				url : "/alumnos",
-				data : JSON.stringify({"matricula":""+matricula+"","nombre":""+nombre+"","carrera":""+carrera+""}/*datos*/),
+				data : JSON.stringify({"matricula":""+matricula.value+"","nombre":""+nombre.value+"","carrera":""+carrera.value+""}/*datos*/),
 				dataType : 'json',
 				success : function(result) {
 					console.log("data: "+  result);
@@ -59,9 +57,8 @@
 		  });//fin create
 		  
 		$("#readbtn").click(function(){
-			
 			var matricula = $('#matricula').val();
-			//var resultadodata;
+			var resultadodata;
 			  $.get("alumnos/"+matricula, function(data, status){
 				  $('#nombre').attr('placeholder','nombre').val(data.nombre);
 				  $('#carrera').attr('placeholder','carrera').val(data.carrera);
@@ -70,34 +67,35 @@
 			    });
 	    });//fin read
 	    
-	    $("#updatebtn").click(function(){
-	    	
+	    $("#update").click(function(){
 			  var matricula = $('#matricula').val();
-			  var nombre = $('#nombre').val();
-			  var carrera = $('#carrera').val();
 			  
-			  var urldirection="alumnos/"+matricula;
-			  alert(urldirection+" "+nombre+" "+carrera);
-			  
+				var informacion={
+						
+			    	"matricula": $('#matricula').val(),
+			        "nombre":  $('#nombre').val(),
+			        "carrera":  $('#carrera').val()
+			    }
 				$.ajax({
 					type : "PUT",
 					contentType : "application/json",
-					url : urldirection,
-					data : JSON.stringify({"matricula":""+matricula+"","nombre":""+nombre+"","carrera":""+carrera+""}/*datos*/),
+					url : "alumnos/"+matricula,
+					data : JSON.stringify(informacion),
 					dataType : 'json',
 					success : function(result) {
 						console.log("data: "+  result);
 					}
+					
 				});
 			  });//fin update
 	    
 		$("#deletebtn").click(function(){
 			  var matricula = $('#matricula').val();
-			  var urldirection="alumnos/"+matricula ;
-			  alert(urldirection);
+			  var urldir="alumnos/"+matricula ;
+			  alert(urldir);
 				$.ajax({
 					type : "DELETE",
-					url : urldirection,
+					url : urldir,
 					success : function(result) {
 						console.log("data: "+  result);
 					}

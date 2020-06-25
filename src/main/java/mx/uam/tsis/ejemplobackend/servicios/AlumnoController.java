@@ -1,8 +1,10 @@
 package mx.uam.tsis.ejemplobackend.servicios;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -16,11 +18,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.extern.slf4j.Slf4j;
 import mx.uam.tsis.ejemplobackend.negocio.modelo.Alumno;
+import mx.uam.tsis.ejemplobackend.negocioo.AlumnoService;
 
 /**
  * Controlador para el API rest
  * 
- * @author humbertocervantes
+ * @author Carlos Jesus Morales Ocaranza
  *
  */
 @RestController
@@ -28,8 +31,9 @@ import mx.uam.tsis.ejemplobackend.negocio.modelo.Alumno;
 public class AlumnoController {
 	
 	// La "base de datos"
-	private Map <Integer, Alumno> alumnoRepository = new HashMap <>();
-	
+	//private Map <Integer, Alumno> alumnoRepository = new HashMap <>();
+	@Autowired
+	private AlumnoService alumnoService;
 	//AGREGAR
 	@PostMapping(path = "/alumnos", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity <?> create(@RequestBody Alumno nuevoAlumno) {
@@ -38,54 +42,61 @@ public class AlumnoController {
 		
 		log.info("Recibí llamada a create con "+nuevoAlumno);
 		
-		alumnoRepository.put(nuevoAlumno.getMatricula(), nuevoAlumno);
+		//alumnoRepository.put(nuevoAlumno.getMatricula(), nuevoAlumno);
+		Alumno alumno = alumnoService.create(nuevoAlumno);
 		
-		return ResponseEntity.status(HttpStatus.CREATED).build();
+		if(alumno != null) {
+			return ResponseEntity.status(HttpStatus.CREATED).body(alumno);			
+		} else {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("no se puede crear alumno");
+		}
 	}
 	
 	//GET TODOS
 	@GetMapping(path = "/alumnos", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity <?> retrieveAll() {
-		return ResponseEntity.status(HttpStatus.OK).body(alumnoRepository.values());
+		List <Alumno> result = alumnoService.retrieveAll();
+		return ResponseEntity.status(HttpStatus.OK).body(result);
 		
 	}
  
 	//BUSCAR SOLO 1
 	@GetMapping(path = "/alumnos/{matricula}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity <?> retrieve(@PathVariable("matricula") Integer matricula) {
+	public ResponseEntity <?> retrieve(@PathVariable("matricula") Integer matricula) {//path variable, variable que viene en la ruta
 		log.info("Buscando al alumno con matricula "+matricula);
 		
-		Alumno alumno = alumnoRepository.get(matricula);
+		//Alumno alumno = alumnoRepository.get(matricula);
+		Alumno alumno = alumnoService.retrieveOne(matricula);
 		
 		if(alumno != null) {
 			return ResponseEntity.status(HttpStatus.OK).body(alumno);
 		} else {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 		}
-		
-		
 	}
 	
 	//ACTUALIZAR
-	@PutMapping(path = "/alumnos/{matricula}", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity <?> update(@RequestBody Alumno nuevoAlumno) {
-		
-		alumnoRepository.replace(nuevoAlumno.getMatricula(), nuevoAlumno);
-		log.info("Actualize al alumno a " +  nuevoAlumno);
-		
-		return ResponseEntity.status(HttpStatus.OK).build();
-	}
+		@PutMapping(path = "/alumnos/{matricula}", consumes = MediaType.APPLICATION_JSON_VALUE)
+		public ResponseEntity <?> update(@RequestBody Alumno nuevoAlumno, @PathVariable("matricula") Integer matricula) {//requestbody, lo que viene en la url
+			if(alumnoService.updateService(nuevoAlumno, matricula) != null) {
+				log.info("Actualize al alumno a " +  nuevoAlumno);
+				return ResponseEntity.status(HttpStatus.OK).build();
+			}else {
+				return ResponseEntity.status(HttpStatus.CONFLICT).build();
+				}
+		}
 	
 	//ELIMINAR
-	@DeleteMapping(path = "/alumnos/{matricula}")
-	public ResponseEntity <?>  delete(@PathVariable("matricula") Integer matricula) {
-		//Alumno alumno = alumnoRepository.get(matricula);
-		alumnoRepository.remove(matricula);
-		
-		return ResponseEntity.status(HttpStatus.OK).body(matricula);
-		
-	}
+		@DeleteMapping(path = "/alumnos/{matricula}")
+		public ResponseEntity <?>  delete(@PathVariable("matricula") Integer matricula) {
+			//Alumno alumno = alumnoRepository.get(matricula);
+			if(alumnoService.deleteOne(matricula)==null) {
+				return ResponseEntity.status(HttpStatus.OK).build();
+			} else {
+				return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+			}
+		}
 	
-	
+	//MAPPING LO QUE HACE ES UBICAR TU URL PARA QUE, EN BASE A ELLO, REALIZE LA SIGUIENTE FUNCION
  
 }
