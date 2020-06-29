@@ -6,15 +6,20 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.stereotype.Component;
+import org.springframework.data.repository.CrudRepository;
 
 import lombok.extern.slf4j.Slf4j;
 import mx.uam.tsis.ejemplobackend.negocio.modelo.Alumno;
 import mx.uam.tsis.ejemplobackend.servicios.AlumnoController;
 
-@Component
-@Slf4j
-public class AlumnoRepository {
-	private Map <Integer, Alumno> alumnoRepository = new HashMap <>();
+/*@Component
+@Slf4j*/
+
+public interface AlumnoRepository extends CrudRepository <Alumno, Integer> {
+	
+	
+	
+	/*private Map <Integer, Alumno> alumnoRepository = new HashMap <>();
 	
 	public Alumno save(Alumno nuevoAlumno) {
 		alumnoRepository.put(nuevoAlumno.getMatricula(), nuevoAlumno);
@@ -37,5 +42,5 @@ public class AlumnoRepository {
 	public void delete(Integer matricula) {
 		alumnoRepository.remove(matricula);
 	}
-	
+	*/
 }
