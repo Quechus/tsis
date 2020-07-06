@@ -1,8 +1,5 @@
 package mx.uam.tsis.ejemplobackend.servicios;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,8 +29,6 @@ import mx.uam.tsis.ejemplobackend.negocioo.AlumnoService;
 @Slf4j
 public class AlumnoController {
 	
-	// La "base de datos"
-	//private Map <Integer, Alumno> alumnoRepository = new HashMap <>();
 	@Autowired
 	private AlumnoService alumnoService;
 	
@@ -44,12 +39,9 @@ public class AlumnoController {
 			)
 	@PostMapping(path = "/alumnos", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity <?> create(@RequestBody Alumno nuevoAlumno) {
-		
 		// No se deben agregar dos alumnos con la misma matricula
-		
 		log.info("Recibí llamada a create con "+nuevoAlumno);
 		
-		//alumnoRepository.put(nuevoAlumno.getMatricula(), nuevoAlumno);
 		Alumno alumno = alumnoService.create(nuevoAlumno);
 		
 		if(alumno != null) {
@@ -81,8 +73,6 @@ public class AlumnoController {
 	@GetMapping(path = "/alumnos/{matricula}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity <?> retrieve(@PathVariable("matricula") Integer matricula) {//path variable, variable que viene en la ruta
 		log.info("Buscando al alumno con matricula "+matricula);
-		
-		//Alumno alumno = alumnoRepository.get(matricula);
 		Optional<Alumno> alumno = alumnoService.retrieveOne(matricula);
 		
 		if(alumno != null) {
@@ -116,7 +106,6 @@ public class AlumnoController {
 				)
 		@DeleteMapping(path = "/alumnos/{matricula}")
 		public ResponseEntity <?>  delete(@PathVariable("matricula") Integer matricula) {
-			//Alumno alumno = alumnoRepository.get(matricula);
 			if(alumnoService.deleteOne(matricula)==false) {
 				return ResponseEntity.status(HttpStatus.OK).build();
 			} else {

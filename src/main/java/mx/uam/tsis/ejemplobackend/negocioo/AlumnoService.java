@@ -1,6 +1,5 @@
 package mx.uam.tsis.ejemplobackend.negocioo;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,12 +21,6 @@ public class AlumnoService {
 	 */
 	public Alumno create(Alumno nuevoAlumno) {
 		// Regla de negocio: No se puede crear más de un alumno con la misma matricula
-		/*Alumno alumno = alumnoRepository.findByMatricula(nuevoAlumno.getMatricula());
-		if(alumno == null) {
-			return alumnoRepository.save(nuevoAlumno);
-		} else {
-			return null;
-		}*/
 		Optional <Alumno> alumnoOpt = alumnoRepository.findById(nuevoAlumno.getMatricula());
 		if(!alumnoOpt.isPresent()) {
 			return alumnoRepository.save(nuevoAlumno);

@@ -2,14 +2,15 @@
 	<head>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 		<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+		<link rel="stylesheet" type = "text/css" href="tsis/src/main/resources/static/css/cssindex.css"/>
+		<link href="../../static/css/styles.css" th:href="@{css/styles.css}" rel="stylesheet" />
+		
 	</head>
-	<style>
-		body{
-			background-color:black;
-			color:red;
-		}
-	</style>
+	
 	<body>
+		
+		<p id="demo">Click the button to change the text in this paragraph.</p>
+		<button onclick="myFunction()">Try it</button>
 		<div class="w3-row">
 			<div class="w3-col m5 l5">
 				<p></p>
@@ -36,6 +37,9 @@
 	</body>
 	
 	<script>
+	function myFunction() {
+		  document.getElementById("demo").innerHTML = "Hello World";
+		}
 	
 	$(document).ready(function(){
 	
