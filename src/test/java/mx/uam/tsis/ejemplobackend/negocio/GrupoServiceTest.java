@@ -91,6 +91,7 @@ public class GrupoServiceTest {
 		
 		Grupo grupo = new Grupo();
 		grupo.setId(1);
+		grupo.setClave("TST01");
 
 		// Simula lo que haría el alumnoRepository real cuando le pasan una matricula de alumno
 		// que no ha sido guardado
@@ -112,6 +113,7 @@ public class GrupoServiceTest {
 		
 		Grupo grupo = new Grupo();
 		grupo.setId(1);
+		grupo.setClave("TST01");
 		
 		// Simula lo que haría el alumnoRepository real cuando le pasan una matricula de alumno
 		// que ya ha sido guardado
